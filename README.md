@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/hefd77dfsv79v6sq?svg=true)](https://ci.appveyor.com/project/Gendalf21/aqa-homeworks130522-2)
