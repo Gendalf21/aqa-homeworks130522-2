@@ -3,52 +3,43 @@ package ru.netology.web;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.Test;
+
 import java.time.Duration;
+
 import static com.codeborne.selenide.Selenide.*;
 
 public class NewClientTest {
     @Test
-    void shouldCreateNewValidActiveClient() {
+    void shouldCreateActiveClient() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        RegistrationInfo validClient = DataGenerator.generateValidActiveClient();
-        $("[name=login]").setValue(validClient.getLogin());
-        $("[name=password]").setValue(validClient.getPassword());
+        RegistrationInfo registeredUser = DataGenerator.getRegisteredUser("active");
+        $("[name=login]").setValue(registeredUser.getLogin());
+        $("[name=password]").setValue(registeredUser.getPassword());
         $(".button__text").click();
         $(".heading").shouldHave(Condition.exactText("Личный кабинет"));
+
     }
 
     @Test
-    void shouldCreateNewValidBlockedClient() {
+    void shouldCreateBlockedClient() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        RegistrationInfo validClient = DataGenerator.generateValidBlockedClient();
-        $("[name=login]").setValue(validClient.getLogin());
-        $("[name=password]").setValue(validClient.getPassword());
+        RegistrationInfo BlockedUser = DataGenerator.getRegisteredUser("blocked");
+        $("[name=login]").setValue(BlockedUser.getLogin());
+        $("[name=password]").setValue(BlockedUser.getPassword());
         $(".button__text").click();
         $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
                 shouldHave(Condition.exactText("Ошибка! Пользователь заблокирован"));
     }
 
     @Test
-    void shouldCreateClientWithIncorrectLogin() {
+    void shouldCreateIncorrectData() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        RegistrationInfo validClient = DataGenerator.generateClientWithIncorrectLogin();
-        $("[name=login]").setValue(validClient.getLogin());
-        $("[name=password]").setValue(validClient.getPassword());
-        $(".button__text").click();
-        $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
-                shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
-    }
-
-    @Test
-    void shouldCreateClientWithIncorrectPassword() {
-        Configuration.holdBrowserOpen = true;
-        open("http://localhost:9999");
-        RegistrationInfo validClient = DataGenerator.generateClientWithIncorrectPassword();
-        $("[name=login]").setValue(validClient.getLogin());
-        $("[name=password]").setValue(validClient.getPassword());
+        RegistrationInfo IncorrectData = DataGenerator.getUser("active");
+        $("[name=login]").setValue(IncorrectData.getLogin());
+        $("[name=password]").setValue(IncorrectData.getPassword());
         $(".button__text").click();
         $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
                 shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));

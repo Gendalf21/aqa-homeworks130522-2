@@ -1,75 +1,55 @@
 package ru.netology.web;
 
 import static io.restassured.RestAssured.given;
+
 import com.github.javafaker.Faker;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+
 import java.util.Locale;
 
 
-    public class DataGenerator {
+public class DataGenerator {
 
-        private static Faker faker = new Faker(new Locale("en"));
+    private static Faker faker = new Faker(new Locale("en"));
 
-        private static RequestSpecification requestSpec = new RequestSpecBuilder()
-                .setBaseUri("http://localhost")
-                .setPort(9999)
-                .setAccept(ContentType.JSON)
-                .setContentType(ContentType.JSON)
-                .log(LogDetail.ALL)
-                .build();
+    private static RequestSpecification requestSpec = new RequestSpecBuilder()
+            .setBaseUri("http://localhost")
+            .setPort(9999)
+            .setAccept(ContentType.JSON)
+            .setContentType(ContentType.JSON)
+            .log(LogDetail.ALL)
+            .build();
 
-        public static void requestForm(RegistrationInfo registrationInfo) {
-            given()
-                    .spec(requestSpec)
-                    .body(registrationInfo)
-                    .when()
-                    .post("/api/system/users")
-                    .then()
-                    .statusCode(200);
-        }
 
-        public static RegistrationInfo generateValidActiveClient() {
-            Faker faker = new Faker(new Locale("en"));
-            String login = faker.name().firstName();
-            String password = faker.internet().password();
-            String status = "active";
-            RegistrationInfo newClient = new RegistrationInfo (login, password, status);
-            requestForm(newClient);
-            return newClient;
+    public static void requestForm(RegistrationInfo info) {
 
-        }
+        given()
+                .spec(requestSpec)
+                .body(new RegistrationInfo(info.getLogin(), info.getPassword(), info.getStatus()))
+                .when()
+                .post("/api/system/users")
+                .then()
+                .statusCode(200);
+    }
 
-        public static RegistrationInfo generateValidBlockedClient() {
-            Faker faker = new Faker(new Locale("en"));
-            String login = faker.name().firstName();
-            String password = faker.internet().password();
-            String status = "blocked";
-            RegistrationInfo newClient = new RegistrationInfo(login, password, status);
-            requestForm(newClient);
-            return newClient;
-        }
+    public static String getLogin() {
+        return faker.name().username();
+    }
 
-        public static RegistrationInfo generateClientWithIncorrectLogin() {
-            Faker faker = new Faker(new Locale("en"));
-            String login = "maya";
-            String password = faker.internet().password();
-            String status = "active";
-            RegistrationInfo newClient = new RegistrationInfo(login, password, status);
-            requestForm(newClient);
-            return new RegistrationInfo("mayyaa", password, status);
-        }
+    public static String getPassword() {
+        return faker.internet().password();
+    }
 
-        public static RegistrationInfo generateClientWithIncorrectPassword() {
-            Faker faker = new Faker(new Locale("en"));
-            String login = faker.name().firstName();
-            String password = "password";
-            String status = "active";
-            RegistrationInfo newClient = new RegistrationInfo(login, password, status);
-            requestForm(newClient);
-            return new RegistrationInfo(login, "incorrectpassword", status);
-        }
+    public static RegistrationInfo getUser(String status) {
+        return new RegistrationInfo(getLogin(), getPassword(), status);
+    }
 
+    public static RegistrationInfo getRegisteredUser(String status) {
+        RegistrationInfo registeredUser = getUser(status);
+        requestForm(registeredUser);
+        return registeredUser;
+    }
 }
