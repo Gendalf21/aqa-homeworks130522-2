@@ -17,8 +17,8 @@ public class NewClientTest {
         $("[name=login]").setValue(registeredUser.getLogin());
         $("[name=password]").setValue(registeredUser.getPassword());
         $(".button__text").click();
-        $(".heading").shouldHave(Condition.exactText("Личный кабинет"));
-
+        $(".heading").shouldBe(Condition.visible, Duration.ofMillis(5000)).
+                shouldHave(Condition.exactText("Личный кабинет"));
     }
 
     @Test
@@ -34,12 +34,36 @@ public class NewClientTest {
     }
 
     @Test
-    void shouldCreateIncorrectData() {
+    void shouldCreateIncorrectLogin() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        RegistrationInfo IncorrectData = DataGenerator.getUser("active");
-        $("[name=login]").setValue(IncorrectData.getLogin());
-        $("[name=password]").setValue(IncorrectData.getPassword());
+        RegistrationInfo IncorrectLogin = DataGenerator.getUserIncorrectLogin("active");
+        $("[name=login]").setValue(IncorrectLogin.getLogin());
+        $("[name=password]").setValue(IncorrectLogin.getPassword());
+        $(".button__text").click();
+        $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
+                shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
+    }
+
+    @Test
+    void shouldCreateIncorrectPass() {
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+        RegistrationInfo IncorrectPass = DataGenerator.getUserIncorrectPass("active");
+        $("[name=login]").setValue(IncorrectPass.getLogin());
+        $("[name=password]").setValue(IncorrectPass.getPassword());
+        $(".button__text").click();
+        $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
+                shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
+    }
+
+    @Test
+    void shouldCreateIncorrectLoginPass() {
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+        RegistrationInfo IncorrectLoginPass = DataGenerator.getUserIncorrectLoginPass("active");
+        $("[name=login]").setValue(IncorrectLoginPass.getLogin());
+        $("[name=password]").setValue(IncorrectLoginPass.getPassword());
         $(".button__text").click();
         $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
                 shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));

@@ -43,6 +43,7 @@ public class DataGenerator {
         return faker.internet().password();
     }
 
+
     public static RegistrationInfo getUser(String status) {
         return new RegistrationInfo(getLogin(), getPassword(), status);
     }
@@ -52,4 +53,17 @@ public class DataGenerator {
         requestForm(registeredUser);
         return registeredUser;
     }
+
+    public static RegistrationInfo getUserIncorrectLogin(String status) {
+        return new RegistrationInfo("alex", getPassword(), status);
+    }
+
+    public static RegistrationInfo getUserIncorrectPass(String status) {
+        return new RegistrationInfo(getLogin(), "pass" , status);
+    }
+
+    public static RegistrationInfo getUserIncorrectLoginPass(String status) {
+        return new RegistrationInfo("alex", "pass" , status);
+    }
+
 }
