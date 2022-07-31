@@ -10,7 +10,6 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.Locale;
 
-
 public class DataGenerator {
 
     private static Faker faker = new Faker(new Locale("en"));
@@ -22,7 +21,6 @@ public class DataGenerator {
             .setContentType(ContentType.JSON)
             .log(LogDetail.ALL)
             .build();
-
 
     public static void requestForm(RegistrationInfo info) {
 
@@ -43,7 +41,6 @@ public class DataGenerator {
         return faker.internet().password();
     }
 
-
     public static RegistrationInfo getUser(String status) {
         return new RegistrationInfo(getLogin(), getPassword(), status);
     }
@@ -52,18 +49,6 @@ public class DataGenerator {
         RegistrationInfo registeredUser = getUser(status);
         requestForm(registeredUser);
         return registeredUser;
-    }
-
-    public static RegistrationInfo getUserIncorrectLogin(String status) {
-        return new RegistrationInfo("alex", getPassword(), status);
-    }
-
-    public static RegistrationInfo getUserIncorrectPass(String status) {
-        return new RegistrationInfo(getLogin(), "pass" , status);
-    }
-
-    public static RegistrationInfo getUserIncorrectLoginPass(String status) {
-        return new RegistrationInfo("alex", "pass" , status);
     }
 
 }
