@@ -37,9 +37,8 @@ public class NewClientTest {
     void shouldCreateIncorrectLoginCorrectPass() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        RegistrationInfo incorrectLogin = DataGenerator.getUser("active");
         RegistrationInfo correctPass = DataGenerator.getRegisteredUser("active");
-        $("[name=login]").setValue(incorrectLogin.getLogin());
+        $("[name=login]").setValue(DataGenerator.getLogin());
         $("[name=password]").setValue(correctPass.getPassword());
         $(".button__text").click();
         $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
@@ -51,9 +50,8 @@ public class NewClientTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         RegistrationInfo correctLogin = DataGenerator.getRegisteredUser("active");
-        RegistrationInfo incorrectPass = DataGenerator.getUser("active");
         $("[name=login]").setValue(correctLogin.getLogin());
-        $("[name=password]").setValue(incorrectPass.getPassword());
+        $("[name=password]").setValue(DataGenerator.getPassword());
         $(".button__text").click();
         $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
                 shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
@@ -63,9 +61,8 @@ public class NewClientTest {
     void shouldCreateIncorrectLoginIncorrectPass() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        RegistrationInfo incorrectLoginIncorrectPass = DataGenerator.getUser("active");
-        $("[name=login]").setValue(incorrectLoginIncorrectPass.getLogin());
-        $("[name=password]").setValue(incorrectLoginIncorrectPass.getPassword());
+        $("[name=login]").setValue(DataGenerator.getLogin());
+        $("[name=password]").setValue(DataGenerator.getPassword());
         $(".button__text").click();
         $(".notification__content").shouldBe(Condition.visible, Duration.ofMillis(5000)).
                 shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
